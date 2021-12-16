@@ -24,7 +24,7 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:scaleType="fitXY"
-        android:backgroundTint="@color/purple_200"
+        android:backgroundTint="@android:color/holo_blue_bright"
         android:background="#B9F6CA"/>
 
         <TextView
