@@ -7,4 +7,9 @@
     <string name="terrain_map">terrain_map</string>
     <string name="map">map</string>
     <string name="title_activity_maps2">MapsActivity2</string>
+    <string name="setLimit">set_limit</string>
+    <string name="pikachu">pikachu</string>
+    <string name="height">height</string>
+    <string name="weight">weight</string>
+    <string name="moves">moves</string>
 </resources>

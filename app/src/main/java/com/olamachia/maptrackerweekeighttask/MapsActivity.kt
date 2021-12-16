@@ -2,32 +2,32 @@ package com.olamachia.maptrackerweekeighttask
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.olamachia.maptrackerweekeighttask.Model.location
-import com.olamachia.maptrackerweekeighttask.databinding.ActivityMaps2Binding
 import com.olamachia.maptrackerweekeighttask.databinding.ActivityMapsBinding
-import androidx.core.location.LocationManagerCompat.getCurrentLocation as getCurrentLocation1
+
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
-    private lateinit var fusedLocClient: FusedLocationProviderClient
+    private var fusedLocClient: FusedLocationProviderClient? = null
 
     private lateinit var map: GoogleMap
     private lateinit var binding: ActivityMapsBinding
+    private lateinit var locationRequest: LocationRequest
+//    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
 
 
     // use it to request location updates and get the latest location
@@ -38,6 +38,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        getPartnerlocation()
+        setupLocClient()
+    
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
@@ -48,7 +51,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         getCurrentLocation()
-        setupLocClient()
+
 
     }
     private fun setupLocClient() {
@@ -81,39 +84,75 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             requestLocPermissions()
         } else {
 
-            fusedLocClient.lastLocation.addOnCompleteListener {
-                // lastLocation is a task running in the background
-                val location = it.result //obtain location
-                //reference to the database
-                val database: FirebaseDatabase = FirebaseDatabase.getInstance()
-                val ref: DatabaseReference = database.getReference("Ahmed")
-                if (location != null) {
-
-                    val latLng = LatLng(location.latitude, location.longitude)
-                    // create a marker at the exact location
-                    map.addMarker(
-                        MarkerOptions().position(latLng)
-                            .title("You are currently here!")
-                    )
-                        ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.lanre))
-                    // create an object that will specify how the camera will be updated
-                    val update = CameraUpdateFactory.newLatLngZoom(latLng, 16.0f)
-
-                    map.moveCamera(update)
-                    //Save the location data to the database
-
-                    ref.child(
-                        "Ahmed"
-                    ).setValue(location("Ahmed", location.latitude, location.longitude))
-                } else {
-                    // if location is null , log an error message
-                    Log.e(TAG, "No location found")
-                }
-
-
+            locationRequest = LocationRequest.create()
+            locationRequest.apply {
+                locationRequest.interval = 3
+                locationRequest.fastestInterval = 2
+                locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+                fusedLocClient?.requestLocationUpdates(
+                    locationRequest, locationCallback, Looper.myLooper()!!
+                )
             }
         }
     }
+        private var locationCallback = object : LocationCallback(){
+
+            override fun onLocationResult(p0: LocationResult) {
+
+                val location = p0.lastLocation
+                val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+                val ref: DatabaseReference = database.getReference("Users")
+
+                val latLng = LatLng(location.latitude, location.longitude)
+
+                val myFirebaseData = location("updatedLocation.latitude, updatedLocation.longitude")
+                map.clear()
+                map.addMarker(MarkerOptions().position(latLng).title("You are currently here!"))!!
+                    ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.lanre))
+
+                val update = CameraUpdateFactory.newLatLngZoom(latLng, 16.0f)
+                map.moveCamera(update)
+
+                ref.child("Ahmed").setValue(location("Ahmed", location.latitude, location.longitude))
+                // if location is null , log an error message
+                Log.e(TAG, "No location found")
+
+            }
+        }
+
+//            fusedLocClient?.lastLocation?.addOnCompleteListener {
+//                // lastLocation is a task running in the background
+//                val location = it.result //obtain location
+//                //reference to the database
+//                val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+//                val ref: DatabaseReference = database.getReference("Users")
+//                if (location != null) {
+//
+//                    val latLng = LatLng(location.latitude, location.longitude)
+//                    // create a marker at the exact location
+//                    map.addMarker(
+//                        MarkerOptions().position(latLng)
+//                            .title("You are currently here!")
+//                    )
+//                        ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.lanre))
+//                    // create an object that will specify how the camera will be updated
+//                    val update = CameraUpdateFactory.newLatLngZoom(latLng, 16.0f)
+//
+//                    map.moveCamera(update)
+//                    //Save the location data to the database
+//
+//                    ref.child(
+//                        "Ahmed"
+//                    ).setValue(location("Ahmed", location.latitude, location.longitude))
+//                } else {
+//                    // if location is null , log an error message
+//                    Log.e(TAG, "No location found")
+//                }
+
+
+
+
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -133,5 +172,34 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
+
+    fun getPartnerlocation(){
+        //reference to the database
+        val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+        val ref: DatabaseReference = database.getReference("Users")
+
+        ref.addValueEventListener(
+            object: ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val model = snapshot.child("Shak").getValue(location::class.java)
+                    val latLng = LatLng(model?.latitude!!, model.longitude!!)
+                    // create a marker at the exact location
+                    map.addMarker(
+                        MarkerOptions().position(latLng)
+                            .title("Shak is currently here!")
+                    )
+                        ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.beauty))
+                    // create an object that will specify how the camera will be updated
+
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                   Toast.makeText(applicationContext, "could not read from database", Toast.LENGTH_LONG).show()
+                }
+
+            }
+        )
+    }
+
 }
 

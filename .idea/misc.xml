@@ -3,12 +3,23 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-v24/ic_home.xml" value="0.26145833333333335" />
+        <entry key="app/src/main/res/drawable-v24/ic_house.xml" value="0.26145833333333335" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.31851851851851853" />
+        <entry key="app/src/main/res/drawable-v24/image_icon.xml" value="0.26145833333333335" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.31851851851851853" />
+        <entry key="app/src/main/res/font/adamina.xml" value="0.19895833333333332" />
+        <entry key="app/src/main/res/font/cherry_swash.xml" value="0.2755208333333333" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.16770833333333332" />
+        <entry key="app/src/main/res/layout/activity_main2.xml" value="0.2453125" />
         <entry key="app/src/main/res/layout/activity_maps.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/activity_maps2.xml" value="0.25364583333333335" />
+        <entry key="app/src/main/res/layout/activity_uploadimage.xml" value="0.2453125" />
+        <entry key="app/src/main/res/layout/fragment_pokeman_list.xml" value="0.2453125" />
+        <entry key="app/src/main/res/layout/fragment_pokemon_details.xml" value="0.2453125" />
+        <entry key="app/src/main/res/layout/pokeman_list_item.xml" value="0.2453125" />
         <entry key="app/src/main/res/menu/map_options.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/menu/nav_graph.xml" value="0.2453125" />
       </map>
     </option>
   </component>

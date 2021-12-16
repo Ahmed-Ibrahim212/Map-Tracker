@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/pokemonListFragment">
+
+    <fragment
+        android:id="@+id/pokemonListFragment"
+        android:name="com.olamachia.maptrackerweekeighttask.PokemonListFragment"
+        android:label="PokemonListFragment"
+        tools:layout="@layout/fragment_pokeman_list">
+        <action
+            android:id="@+id/action_pokemonListFragment_to_pokemonDetailsFragment"
+            app:destination="@id/pokemonDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pokemonDetailsFragment"
+        android:name="com.olamachia.maptrackerweekeighttask.PokemonDetailsFragment"
+        android:label="PokemonDetailsFragment"
+        tools:layout="@layout/fragment_pokemon_details">
+        <argument
+            android:name="number"
+            app:argType="string" />
+    </fragment>
+
+
+</navigation>
