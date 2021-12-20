@@ -105,7 +105,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                 val latLng = LatLng(location.latitude, location.longitude)
 
-                val myFirebaseData = location("updatedLocation.latitude, updatedLocation.longitude")
                 map.clear()
                 map.addMarker(MarkerOptions().position(latLng).title("You are currently here!"))!!
                     ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.lanre))
@@ -120,39 +119,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-//            fusedLocClient?.lastLocation?.addOnCompleteListener {
-//                // lastLocation is a task running in the background
-//                val location = it.result //obtain location
-//                //reference to the database
-//                val database: FirebaseDatabase = FirebaseDatabase.getInstance()
-//                val ref: DatabaseReference = database.getReference("Users")
-//                if (location != null) {
-//
-//                    val latLng = LatLng(location.latitude, location.longitude)
-//                    // create a marker at the exact location
-//                    map.addMarker(
-//                        MarkerOptions().position(latLng)
-//                            .title("You are currently here!")
-//                    )
-//                        ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.lanre))
-//                    // create an object that will specify how the camera will be updated
-//                    val update = CameraUpdateFactory.newLatLngZoom(latLng, 16.0f)
-//
-//                    map.moveCamera(update)
-//                    //Save the location data to the database
-//
-//                    ref.child(
-//                        "Ahmed"
-//                    ).setValue(location("Ahmed", location.latitude, location.longitude))
-//                } else {
-//                    // if location is null , log an error message
-//                    Log.e(TAG, "No location found")
-//                }
 
 
 
-
-
+    //Requesting for permissions
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -173,6 +143,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    //getting the partner location
     fun getPartnerlocation(){
         //reference to the database
         val database: FirebaseDatabase = FirebaseDatabase.getInstance()
